@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 ### 1-3. Run the code "main.py"
 
-You must have to the excel file named "病人清單.xlsx" first.
+You need to have the excel file named "病人清單.xlsx" first.
 ![螢幕擷取畫面 2024-03-21 172045](https://hackmd.io/_uploads/HkBr3OKR6.png)
 ![螢幕擷取畫面 2024-03-21 172130](https://hackmd.io/_uploads/ByyUnuKRT.png)
 ![螢幕擷取畫面 2024-03-21 172142](https://hackmd.io/_uploads/rJ4LnOYRp.png)
