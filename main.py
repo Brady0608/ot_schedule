@@ -44,12 +44,8 @@ sheet = wb['Inpatient']
 
 Inpatient_data = pd.read_excel(excel_file, sheet_name='Inpatient')  # 讀取SHEET
 OPD_data = pd.read_excel(excel_file, sheet_name='OPD')
-# print(Inpatient_data[Inpatient_data['治療師']=='陳怡儒'])
 therapist_list = sorted(list(set(list(Inpatient_data['治療師']))))  # 取得治療師名單
-# print(therapist_list)
 schedule_time = sorted(list(set(list(Inpatient_data['排程時間']))))  # 取得排程時間，並做排序
-# print(schedule_time)
-# datetime.time.strftime()
 for therapist in therapist_list:
     inpatient_dict[therapist] = Inpatient_data.loc[
         Inpatient_data['治療師'] == therapist, ['姓名', '排程時間']].values.tolist()  # 取得每位治療師各自病人名單並以list格式存在字典裡
@@ -67,17 +63,11 @@ for therapist in therapist_list:
 
 all_patient_dict = {therapist: inpatient_dict[therapist] + OPD_dict[therapist] for therapist in
                     therapist_list}  # 將兩字典合併
-# print(all_patient_dict)
 therapist_schedule_dict = {}
 week_total_dict = {}
 
 for therapist in therapist_list:
     week_total = 0
-    # f = {}
-    # for n_week in week:
-    #     f[n_week] = None
-    #     for t_time in schedule_time:
-    #         f[n_week][t_time] = None
     # 每位治療師病人行程表,字典預設值
     f = {'1': {datetime.time(8, 30): None, datetime.time(9, 45): None, datetime.time(11, 0): None,
                datetime.time(13, 30): None, datetime.time(14, 45): None, datetime.time(16, 0): None},
@@ -115,7 +105,6 @@ for therapist in therapist_list:
     week_total_dict[therapist] = week_total
 
 pprint(week_total_dict)
-# pprint.pprint(therapist_schedule_dict)
 df_dict = {}
 characters = "[],'"
 col = ['B', 'C', 'D', 'E', 'F']
@@ -134,8 +123,6 @@ for therapist in therapist_list:
     df = pd.DataFrame.from_dict(therapist_schedule_dict[therapist])
 
     df.dropna(how='all', inplace=True)
-    # pprint(therapist)
-    # pprint(df)
     for Week in df.columns:
         for t_time in schedule_time:
             try:
@@ -153,11 +140,7 @@ for therapist in therapist_list:
 
                         df[Week][t_time][i] = "(  )" + df[Week][t_time][i] + " "
                     df[Week][t_time] = ''.join(x for x in str(df[Week][t_time]) if x not in characters)
-                    #             break
-                    # df[Week][t_time].to_string()
-                    # pprint.pprint(df[Week][t_time])
             except KeyError:
-                # print("Got KeyError")
                 continue
     df.columns = col_week
     df_dict[therapist] = df
@@ -166,8 +149,6 @@ pprint(counts)
 font_ = Font(
     name="標楷體",
     size=14,
-    # italic=True,
-    # color='ffff00',
     bold=False,
     strike=None
 )
@@ -175,8 +156,6 @@ font_ = Font(
 font_1 = Font(
     name="標楷體",
     size=14,
-    # italic=True,
-    # color='ffff00',
     bold=True,
     strike=None
 )
@@ -184,8 +163,6 @@ font_1 = Font(
 font_2 = Font(
     name="標楷體",
     size=12,
-    # italic=True,
-    # color='ffff00',
     bold=False,
     strike=None
 )
@@ -210,23 +187,6 @@ with pd.ExcelWriter(date_5_days_o[0] + '~' + date_5_days_o[4] + '各時段人次
 
 
 with pd.ExcelWriter(date_5_days_o[0] + '~' + date_5_days_o[4] + "病患出席紀錄表.xlsx", engine='openpyxl') as writer:
-    # df_counts = pd.DataFrame.from_dict(counts)
-    # df_counts.columns = col_week
-    # df_counts.to_excel(writer, sheet_name='各時段人次統計', startrow=1)
-    # ws = writer.sheets['各時段人次統計']
-    # for x in col:
-    #     ws.column_dimensions[x].width = 32.5
-    # ws.column_dimensions['A'].width = 32.5
-    # for row in ws.iter_rows():
-    #     for cell in row:
-    #         cell.alignment = openpyxl.styles.Alignment(wrap_text=True, vertical='center',horizontal='center')
-    #         cell.font = font_
-    # ws.print_options.gridLines = True  # 列印格線
-    # ws.print_options.horizontalCentered = True  # 列印置中
-    # ws.page_setup.scale = 71  # 列印縮放比例
-    # ws.set_printer_settings(ws.PAPERSIZE_A4, ws.ORIENTATION_LANDSCAPE) # A4 橫式列印
-    # ws.merge_cells(start_row=1, start_column=3, end_row=1, end_column=5)
-    # ws['C1'] = col_week[0] +' ~ ' + col_week[4] + '各時段人次統計'
     for therapist in therapist_list:
         df_dict[therapist].to_excel(writer, sheet_name=therapist, startrow=1)
         worksheet = writer.sheets[therapist]
